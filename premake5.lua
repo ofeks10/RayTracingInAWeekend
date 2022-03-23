@@ -9,6 +9,8 @@ project "RayTracingInAWeekend"
 
     files { "src/**.h", "src/**.c" }
 
+    links "m"
+
     filter "Configurations:Debug"
         defines { "DEBUG" }
         symbols "On"
