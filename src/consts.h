@@ -1,7 +1,8 @@
 #ifndef CONSTS_H
 #define CONSTS_H
 
-#define IMAGE_WIDTH  (256)
-#define IMAGE_HEIGHT (256)
+#define ASPECT_RATION (16.0 / 9.0)
+#define IMAGE_WIDTH  (400)
+#define IMAGE_HEIGHT ((int)(IMAGE_WIDTH / ASPECT_RATION))
 
 #endif // CONSTS_H

@@ -77,3 +77,9 @@ double vec3_length(vec3_t *v) {
 double vec3_length_sq(vec3_t *v) {
     return v->x * v->x + v->y * v->y + v->z * v->z;
 }
+
+void vec3_copy(vec3_t *v, const vec3_t *u) {
+    v->x = u->x;
+    v->y = u->y;
+    v->z = u->z;
+}
