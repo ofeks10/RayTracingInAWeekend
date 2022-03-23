@@ -60,6 +60,11 @@ endif
 # File sets
 # #############################################
 
+GENERATED :=
+OBJECTS :=
+
+GENERATED += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/main.o
 
 # Rules
 # #############################################
@@ -67,7 +72,7 @@ endif
 all: $(TARGET)
 	@:
 
-$(TARGET): $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
+$(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
 	@echo Linking RayTracingInAWeekend
 	$(SILENT) $(LINKCMD)
@@ -122,6 +127,10 @@ endif
 
 # File Rules
 # #############################################
+
+$(OBJDIR)/main.o: src/main.c
+	@echo $(notdir $<)
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 
 -include $(OBJECTS:%.o=%.d)
 ifneq (,$(PCH))
