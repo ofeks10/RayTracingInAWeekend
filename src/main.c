@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "consts.h"
+#include "color.h"
+#include "vec3.h"
 
 int main(void) {
     printf("P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
@@ -8,15 +10,12 @@ int main(void) {
     for (int j = IMAGE_HEIGHT - 1; j >= 0; --j) {
         fprintf(stderr, "\rScan lines remaining: %d", j);
         for (int i = 0; i < IMAGE_WIDTH; ++i) {
-            double r = (double) i / (double) (IMAGE_WIDTH - 1);
-            double g = (double) j / (double) (IMAGE_HEIGHT - 1);
-            double b = 0.25;
-
-            int ir = (int) (r * 255.0);
-            int ig = (int) (g * 255.0);
-            int ib = (int) (b * 255.0);
-
-            printf("%d %d %d\n", ir, ig, ib);
+            color_t c;
+            vec3_init(&c,
+                (double) i / (double) (IMAGE_WIDTH - 1),
+                (double) j / (double) (IMAGE_HEIGHT - 1),
+                0.25);
+            write_color(stdout, &c);
         }
     }
     fprintf(stderr, "\n");
