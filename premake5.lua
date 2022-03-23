@@ -7,7 +7,7 @@ project "RayTracingInAWeekend"
     language "C"
     targetdir "bin/%{cfg.buildcfg}"
 
-    files { "**.h", "**.c" }
+    files { "src/**.h", "src/**.c" }
 
     filter "Configurations:Debug"
         defines { "DEBUG" }
