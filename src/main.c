@@ -1,28 +1,35 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <math.h>
 
 #include "consts.h"
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
 
-bool is_hitting_sphere(point3_t center, double sphere_radius, const ray_t ray) {
+
+double is_hitting_sphere(const point3_t center, const double sphere_radius, const ray_t ray) {
     vec3_t oc = vec3_sub(ray.origin, center);
-    double a = vec3_dot(ray.direction, ray.direction);
-    double b = 2.0 * vec3_dot(oc, ray.direction);
-    double c = vec3_dot(oc, oc) - sphere_radius * sphere_radius;
-    double discriminant = b * b - 4 * a * c;
-    return discriminant > 0;
+    double a = vec3_length_sq(ray.direction);
+    double half_b = vec3_dot(oc, ray.direction);
+    double c = vec3_length_sq(oc) - sphere_radius * sphere_radius;
+    double discriminant = (half_b * half_b) - (a * c);
+    if (discriminant < 0) {
+        return -1.0;
+    } else {
+        return (-half_b - sqrt(discriminant)) / a;
+    }
 }
 
 color_t ray_color(const ray_t ray) {
-    if (is_hitting_sphere(vec3_init(0.0, 0.0, -1.0), 0.5, ray)) {
-        return vec3_init(1.0, 0.0, 0.0);
+    double t = is_hitting_sphere(vec3_init(0.0, 0.0, -1.0), 0.5, ray);
+    if (t > 0.0) {
+        vec3_t N = vec3_unit_vector(vec3_sub(ray_at(ray, t), vec3_init(0.0, 0.0, -1.0)));
+        return vec3_mult_scaler(vec3_init(N.x + 1.0, N.y + 1.0, N.z + 1.0), 0.5);
     }
 
     vec3_t unit_direction = vec3_unit_vector(ray.direction);
 
-    double t = 0.5 * (unit_direction.y + 1.0);
+    t = 0.5 * (unit_direction.y + 1.0);
 
     vec3_t result = vec3_add(vec3_mult_scaler(vec3_init(1.0, 1.0, 1.0), 1.0 - t),
         vec3_mult_scaler(vec3_init(0.5, 0.7, 1.0), t));
