@@ -1,4 +1,4 @@
-#include "hit.h"
+#include "hit_record.h"
 #include "ray.h"
 
 

@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <math.h>
 
-#include "hit.h"
+#include "hit_record.h"
 #include "ray.h"
 #include "vec3.h"
 #include "sphere.h"

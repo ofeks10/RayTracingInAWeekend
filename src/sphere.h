@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "hit.h"
+#include "hit_record.h"
 #include "ray.h"
 #include "vec3.h"
 
