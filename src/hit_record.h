@@ -1,5 +1,5 @@
-#ifndef HIT_H
-#define HIT_H
+#ifndef HIT_RECORD_H
+#define HIT__RECORD_H
 
 #include <stdbool.h>
 
@@ -16,4 +16,4 @@ typedef struct hit_record {
 
 void set_face_normal(hit_record_t *rec, const ray_t r, vec3_t outward_normal);
 
-#endif // HIT_H
+#endif // HIT_RECORD_H
