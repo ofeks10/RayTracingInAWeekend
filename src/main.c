@@ -1,11 +1,25 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "consts.h"
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
 
+bool is_hitting_sphere(point3_t center, double sphere_radius, const ray_t ray) {
+    vec3_t oc = vec3_sub(ray.origin, center);
+    double a = vec3_dot(ray.direction, ray.direction);
+    double b = 2.0 * vec3_dot(oc, ray.direction);
+    double c = vec3_dot(oc, oc) - sphere_radius * sphere_radius;
+    double discriminant = b * b - 4 * a * c;
+    return discriminant > 0;
+}
+
 color_t ray_color(const ray_t ray) {
+    if (is_hitting_sphere(vec3_init(0.0, 0.0, -1.0), 0.5, ray)) {
+        return vec3_init(1.0, 0.0, 0.0);
+    }
+
     vec3_t unit_direction = vec3_unit_vector(ray.direction);
 
     double t = 0.5 * (unit_direction.y + 1.0);
