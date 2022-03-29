@@ -54,3 +54,6 @@ dkms.conf
 # Ray tracing stuff
 bin/
 *.ppm
+
+Makefile
+*.make

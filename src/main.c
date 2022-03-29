@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <math.h>
-#include <float.h>
 
 #include "consts.h"
 #include "color.h"
@@ -15,7 +14,7 @@ color_t ray_color(const ray_t ray, const hittable_t *world, int object_amount) {
     for (size_t i = 0; i < object_amount; i++)
     {
         sphere_t sphere = *(sphere_t *)world[i].object;
-        if (hittable_hit(world[i], ray, 0.001, DBL_MAX, &rec)) {
+        if (hittable_hit(world[i], ray, 0.001, INFINITY, &rec)) {
             return vec3_mult_scaler(vec3_add(rec.normal, vec3_init(1.0, 1.0, 1.0)), 0.5);
         }
     }
