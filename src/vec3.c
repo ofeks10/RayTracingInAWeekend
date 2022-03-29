@@ -120,3 +120,10 @@ bool vec3_is_near_zero(vec3_t v) {
 vec3_t vec3_reflect(vec3_t v, vec3_t normal) {
     return vec3_sub(v, vec3_mult_scaler(normal, 2.0 * vec3_dot(v, normal)));
 }
+
+vec3_t vec3_refract(vec3_t v, vec3_t normal, double etai_over_etat) {
+    double cos_theta = fmin(vec3_dot(vec3_mult_scaler(v, -1.0), normal), 1.0);
+    vec3_t r_out_perp = vec3_mult_scaler(vec3_add(v, vec3_mult_scaler(normal, cos_theta)), etai_over_etat);
+    vec3_t r_out_parallel = vec3_mult_scaler(normal, -sqrt(fabs(vec3_length_sq(r_out_perp) - 1.0)));
+    return vec3_add(r_out_perp, r_out_parallel);
+}

@@ -44,5 +44,6 @@ typedef struct material {
 bool material_scatter(material_t *material, ray_t ray_in, hit_record_t *hit_record, color_t *attenuation, ray_t *scattered);
 material_t material_lambertian_init(vec3_t albedo);
 material_t material_metal_init(vec3_t albedo, double fuzz);
+material_t material_dielectric_init(double index_of_refraction);
 
 #endif // MATERIAL_H

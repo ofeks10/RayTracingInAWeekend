@@ -52,21 +52,23 @@ int main(void) {
     printf("P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
 
     material_t material_ground = material_lambertian_init(vec3_init(0.8, 0.8, 0.0));
-    material_t material_center = material_lambertian_init(vec3_init(0.7, 0.3, 0.3));
+    material_t material_center = material_lambertian_init(vec3_init(0.1, 0.2, 0.5));
     material_t material_right = material_metal_init(vec3_init(0.8, 0.8, 0.8), 0.3);
-    material_t material_left = material_metal_init(vec3_init(0.8, 0.6, 0.2), 1.0);
+    material_t material_left = material_dielectric_init(1.5);
 
     sphere_t sphere_center = sphere_init(vec3_init(0.0, 0.0, -1.0), 0.5, &material_center);
     sphere_t sphere_right = sphere_init(vec3_init(1.0, 0.0, -1.0), 0.5, &material_right);
     sphere_t sphere_left = sphere_init(vec3_init(-1.0, 0.0, -1.0), 0.5, &material_left);
+    sphere_t sphere_left2 = sphere_init(vec3_init(-1.0, 0.0, -1.0), -0.4, &material_left);
     sphere_t background_sphere = sphere_init(vec3_init(0.0, -100.5, -1.0), 100.0, &material_ground);
 
     world[0] = hittable_init(&sphere_center, SPHERE);
     world[1] = hittable_init(&sphere_right, SPHERE);
-    world[2] = hittable_init(&sphere_left, SPHERE);
-    world[3] = hittable_init(&background_sphere, SPHERE);
+    world[2] = hittable_init(&sphere_left2, SPHERE);
+    world[3] = hittable_init(&sphere_left, SPHERE);
+    world[4] = hittable_init(&background_sphere, SPHERE);
 
-    object_amount += 4;
+    object_amount += 5;
 
     for (int j = IMAGE_HEIGHT - 1; j >= 0; --j) {
         fprintf(stderr, "\rScan lines remaining: %d", j);

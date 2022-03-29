@@ -1,6 +1,8 @@
 #include <stdbool.h>
+#include <math.h>
 
 #include "vec3.h"
+#include "utils.h"
 
 #include "material.h"
 
@@ -24,11 +26,41 @@ static bool material_metal_scatter(material_t *material, ray_t ray_in, hit_recor
     return vec3_dot(scattered->direction, hit_record->normal) > 0;
 }
 
+static double reflectance(double cosine, double ref_idx) {
+    double r0 = (1.0 - ref_idx) / (1.0 + ref_idx);
+    r0 = r0 * r0;
+    return r0 + (1.0 - r0) * pow(1.0 - cosine, 5.0);
+}
+
+static bool material_dielectric_scatter(material_t *material, ray_t ray_in, hit_record_t *hit_record, color_t *attenuation, ray_t *scattered) {
+    *attenuation = vec3_init(1.0, 1.0, 1.0);
+    double refraction_ratio = material->material.dielectric.index_of_refraction;
+    refraction_ratio = hit_record->front_face ? (1.0 / refraction_ratio) : refraction_ratio;
+
+    vec3_t unit_direction = vec3_unit_vector(ray_in.direction);
+    double cos_theta = fmin(vec3_dot(vec3_mult_scaler(unit_direction, -1.0), hit_record->normal), 1.0);
+    double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+    bool cannot_refract = refraction_ratio * sin_theta > 1.0;
+    vec3_t direction;
+
+    if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random_double()) {
+        direction = vec3_reflect(unit_direction, hit_record->normal);
+    } else {
+        direction = vec3_refract(unit_direction, hit_record->normal, refraction_ratio);
+    }
+
+    *scattered = ray_init(hit_record->p, direction);
+    return true;
+}
+
 bool material_scatter(material_t *material, ray_t ray_in, hit_record_t *hit_record, color_t *attenuation, ray_t *scattered) {
     if (material->type == MATERIAL_LAMBERTIAN) {
         return material_lambertian_scatter(material, ray_in, hit_record, attenuation, scattered);
     } else if (material->type == MATERIAL_METAL) {
         return material_metal_scatter(material, ray_in, hit_record, attenuation, scattered);
+    } else if (material->type == MATERIAL_DIELECTRIC) {
+        return material_dielectric_scatter(material, ray_in, hit_record, attenuation, scattered);
     }
 }
 
@@ -44,5 +76,12 @@ material_t material_metal_init(vec3_t albedo, double fuzz) {
     m.type = MATERIAL_METAL;
     m.material.metal.albedo = albedo;
     m.material.metal.fuzz = fuzz;
+    return m;
+}
+
+material_t material_dielectric_init(double index_of_refraction) {
+    material_t m;
+    m.type = MATERIAL_DIELECTRIC;
+    m.material.dielectric.index_of_refraction = index_of_refraction;
     return m;
 }
