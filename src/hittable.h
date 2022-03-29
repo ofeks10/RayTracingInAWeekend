@@ -7,8 +7,9 @@
 #include "hit_record.h"
 
 
-enum hittable_type { SPHERE };
-typedef hittable_type hittable_type_t;
+typedef enum hittable_type {
+    SPHERE
+} hittable_type_t;
 
 typedef struct hittable {
     void *object;

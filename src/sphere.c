@@ -44,7 +44,7 @@ bool sphere_hit(const sphere_t sphere, const ray_t r, double t_min, double t_max
 
     rec->t = root;
     rec->p = ray_at(r, root);
-    vec3_t outward_normal = vec3_div_scaler((rec->p, sphere.center), sphere.radius);
+    vec3_t outward_normal = vec3_div_scaler(vec3_sub(rec->p, sphere.center), sphere.radius);
     set_face_normal(rec, r, outward_normal);
 
     return true;

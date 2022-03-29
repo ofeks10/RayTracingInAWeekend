@@ -1,5 +1,5 @@
 #ifndef HIT_RECORD_H
-#define HIT__RECORD_H
+#define HIT_RECORD_H
 
 #include <stdbool.h>
 
