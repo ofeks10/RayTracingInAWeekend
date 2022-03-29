@@ -1,6 +1,8 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+#include <stdbool.h>
+
 typedef struct vec3 {
     double x;
     double y;
@@ -26,6 +28,8 @@ double vec3_length_sq(vec3_t v);
 vec3_t vec3_copy(vec3_t v, const vec3_t u);
 vec3_t vec3_random_in_unit_sphere(void);
 vec3_t vec3_random_in_hemisphere(vec3_t normal);
+bool vec3_is_near_zero(vec3_t v);
+vec3_t vec3_reflect(vec3_t v, vec3_t normal);
 
 typedef vec3_t point3_t;
 typedef vec3_t color_t;

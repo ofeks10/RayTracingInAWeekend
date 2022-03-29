@@ -14,10 +14,11 @@ sphere_t sphere_init_empty(void) {
     return s;
 }
 
-sphere_t sphere_init(vec3_t center, double radius) {
+sphere_t sphere_init(vec3_t center, double radius, material_t *material) {
     sphere_t s;
     s.center = vec3_init(center.x, center.y, center.z);
     s.radius = radius;
+    s.material = material;
     return s;
 }
 
@@ -46,6 +47,7 @@ bool sphere_hit(const sphere_t sphere, const ray_t r, double t_min, double t_max
     rec->p = ray_at(r, root);
     vec3_t outward_normal = vec3_div_scaler(vec3_sub(rec->p, sphere.center), sphere.radius);
     set_face_normal(rec, r, outward_normal);
+    rec->material = sphere.material;
 
     return true;
 }

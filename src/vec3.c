@@ -111,3 +111,12 @@ vec3_t vec3_random_in_hemisphere(vec3_t normal) {
         return vec3_mult_scaler(in_unit_sphere, -1.0);
     }
 }
+
+bool vec3_is_near_zero(vec3_t v) {
+    const double epsilon = 1e-8;
+    return fabs(v.x) < epsilon && fabs(v.y) < epsilon && fabs(v.z) < epsilon;
+}
+
+vec3_t vec3_reflect(vec3_t v, vec3_t normal) {
+    return vec3_sub(v, vec3_mult_scaler(normal, 2.0 * vec3_dot(v, normal)));
+}
