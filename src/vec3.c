@@ -1,5 +1,6 @@
 #include <math.h>
 
+#include "utils.h"
 #include "vec3.h"
 
 
@@ -10,6 +11,16 @@ vec3_t vec3_init_empty(void) {
 
 vec3_t vec3_init(double x, double y, double z) {
     vec3_t new = {x, y, z};
+    return new;
+}
+
+vec3_t vec3_init_random(void) {
+    vec3_t new = {random_double(), random_double(), random_double()};
+    return new;
+}
+
+vec3_t vec3_init_random_range(double min, double max) {
+    vec3_t new = {random_range(min, max), random_range(min, max), random_range(min, max)};
     return new;
 }
 
@@ -82,4 +93,21 @@ double vec3_length(vec3_t v) {
 
 double vec3_length_sq(vec3_t v) {
     return vec3_dot(v, v);
+}
+
+vec3_t vec3_random_in_unit_sphere(void) {
+    vec3_t p;
+    do {
+        p = vec3_init_random_range(-1.0, 1.0);
+    } while (vec3_length_sq(p) >= 1.0);
+    return p;
+}
+
+vec3_t vec3_random_in_hemisphere(vec3_t normal) {
+    vec3_t in_unit_sphere = vec3_random_in_unit_sphere();
+    if (vec3_dot(in_unit_sphere, normal) > 0.0) {
+        return in_unit_sphere;
+    } else {
+        return vec3_mult_scaler(in_unit_sphere, -1.0);
+    }
 }

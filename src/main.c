@@ -1,21 +1,28 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "consts.h"
+#include "utils.h"
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
 #include "sphere.h"
 #include "hittable.h"
+#include "camera.h"
 
 
-color_t ray_color(const ray_t ray, const hittable_t *world, int object_amount) {
+color_t ray_color(const ray_t ray, const hittable_t *world, int object_amount, int depth) {
     hit_record_t rec;
+
+    if (depth <= 0) {
+        return vec3_init(0.0, 0.0, 0.0);
+    }
+
     for (size_t i = 0; i < object_amount; i++)
     {
-        sphere_t sphere = *(sphere_t *)world[i].object;
-        if (hittable_hit(world[i], ray, 0.001, INFINITY, &rec)) {
-            return vec3_mult_scaler(vec3_add(rec.normal, vec3_init(1.0, 1.0, 1.0)), 0.5);
+        if (hittable_hit(world[i], ray, 0.0001, INFINITY, &rec)) {
+            vec3_t target = vec3_add(vec3_random_in_hemisphere(rec.normal), (rec.p, rec.normal));
+            ray_t bouncing_ray = ray_init(rec.p, vec3_sub(target, rec.p));
+            return vec3_mult_scaler(ray_color(bouncing_ray, world, object_amount, depth - 1), 0.5);
         }
     }
 
@@ -34,15 +41,8 @@ int main(void) {
     int object_amount = 0;
     hittable_t world[10] = { 0 };
 
-    double viewport_height = 2.0;
-    double viewport_width = ASPECT_RATION * viewport_height;
-    double focal_length = 1.0;
+    camera_t cam = camera_init();
 
-    point3_t origin = vec3_init(0.0, 0.0, 0.0);
-    vec3_t horizontal = vec3_init(viewport_width, 0.0, 0.0);
-    vec3_t vertical = vec3_init(0.0, viewport_height, 0.0);
-
-    vec3_t lower_left_corner = vec3_init(-0.5 * viewport_width, -0.5 * viewport_height, -focal_length);
 
     printf("P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
 
@@ -56,14 +56,15 @@ int main(void) {
     for (int j = IMAGE_HEIGHT - 1; j >= 0; --j) {
         fprintf(stderr, "\rScan lines remaining: %d", j);
         for (int i = 0; i < IMAGE_WIDTH; ++i) {
-            double u = (double)i / (double)(IMAGE_WIDTH - 1);
-            double v = (double)j / (double)(IMAGE_HEIGHT - 1);
-            ray_t ray = ray_init(origin, lower_left_corner);
+            color_t pixel_color = vec3_init(0.0, 0.0, 0.0);
+            for (int s = 0; s < SAMPLES_PER_PIXEL; ++s) {
+                double u = (i + random_double()) / (IMAGE_WIDTH - 1);
+                double v = (j + random_double()) / (IMAGE_HEIGHT - 1);
+                ray_t ray = camera_get_ray(cam, u, v);
+                pixel_color = vec3_add(pixel_color, ray_color(ray, world, object_amount, 50));
+            }
 
-            ray.direction.x += u * horizontal.x;
-            ray.direction.y += v * vertical.y;
-
-            write_color(stdout, (const color_t)ray_color((const ray_t)ray, world, object_amount));
+            write_color(stdout, pixel_color, SAMPLES_PER_PIXEL);
         }
     }
     fprintf(stderr, "\n");

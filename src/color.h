@@ -6,6 +6,6 @@
 #include "vec3.h"
 
 
-void write_color(FILE *f, const color_t c);
+void write_color(FILE *f, const color_t c, int samples_per_pixel);
 
 #endif // COLOR_H

@@ -9,6 +9,8 @@ typedef struct vec3 {
 
 vec3_t vec3_init_empty(void);
 vec3_t vec3_init(double x, double y, double z);
+vec3_t vec3_init_random(void);
+vec3_t vec3_init_random_range(double min, double max);
 void vec3_invert(vec3_t v);
 vec3_t vec3_add(vec3_t v, vec3_t u);
 vec3_t vec3_sub(vec3_t v, vec3_t u);
@@ -22,6 +24,8 @@ vec3_t vec3_unit_vector(vec3_t v);
 double vec3_length(vec3_t v);
 double vec3_length_sq(vec3_t v);
 vec3_t vec3_copy(vec3_t v, const vec3_t u);
+vec3_t vec3_random_in_unit_sphere(void);
+vec3_t vec3_random_in_hemisphere(vec3_t normal);
 
 typedef vec3_t point3_t;
 typedef vec3_t color_t;
