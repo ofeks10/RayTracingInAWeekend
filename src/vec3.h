@@ -31,6 +31,7 @@ vec3_t vec3_random_in_hemisphere(vec3_t normal);
 bool vec3_is_near_zero(vec3_t v);
 vec3_t vec3_reflect(vec3_t v, vec3_t normal);
 vec3_t vec3_refract(vec3_t v, vec3_t normal, double etai_over_etat);
+vec3_t vec3_random_in_unit_disc(void);
 
 typedef vec3_t point3_t;
 typedef vec3_t color_t;

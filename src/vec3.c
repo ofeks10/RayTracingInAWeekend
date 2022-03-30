@@ -127,3 +127,11 @@ vec3_t vec3_refract(vec3_t v, vec3_t normal, double etai_over_etat) {
     vec3_t r_out_parallel = vec3_mult_scaler(normal, -sqrt(fabs(vec3_length_sq(r_out_perp) - 1.0)));
     return vec3_add(r_out_perp, r_out_parallel);
 }
+
+vec3_t vec3_random_in_unit_disc(void) {
+    vec3_t p;
+    do {
+        p = vec3_init(random_range(-1.0, 1.0), random_range(-1.0, 1.0), 0.0);
+    } while (vec3_length_sq(p) >= 1.0);
+    return p;
+}
