@@ -18,17 +18,13 @@ color_t ray_color(const ray_t ray, const hittable_t *world, int object_amount, i
         return vec3_init(0.0, 0.0, 0.0);
     }
 
-    for (size_t i = 0; i < object_amount; i++)
-    {
-        if (hittable_hit(world[i], ray, 0.0001, INFINITY, &rec)) {
-            ray_t scattered;
-            color_t attenuation;
-            sphere_t *sphere = (sphere_t *)world[i].object;
-            if (material_scatter(sphere->material, ray, &rec, &attenuation, &scattered)) {
-                return vec3_mult_vec(attenuation, ray_color(scattered, world, object_amount, depth - 1));
-            } else {
-                return vec3_init(0.0, 0.0, 0.0);
-            }
+    if (hittable_hit(world, object_amount, ray, 0.0001, INFINITY, &rec)) {
+        ray_t scattered;
+        color_t attenuation;
+        if (material_scatter(rec.material, ray, &rec, &attenuation, &scattered)) {
+            return vec3_mult_vec(attenuation, ray_color(scattered, world, object_amount, depth - 1));
+        } else {
+            return vec3_init(0.0, 0.0, 0.0);
         }
     }
 
@@ -62,11 +58,11 @@ int main(void) {
     sphere_t sphere_left2 = sphere_init(vec3_init(-1.0, 0.0, -1.0), -0.4, &material_left);
     sphere_t background_sphere = sphere_init(vec3_init(0.0, -100.5, -1.0), 100.0, &material_ground);
 
-    world[0] = hittable_init(&sphere_center, SPHERE);
+    world[4] = hittable_init(&sphere_center, SPHERE);
     world[1] = hittable_init(&sphere_right, SPHERE);
-    world[2] = hittable_init(&sphere_left2, SPHERE);
     world[3] = hittable_init(&sphere_left, SPHERE);
-    world[4] = hittable_init(&background_sphere, SPHERE);
+    world[2] = hittable_init(&sphere_left2, SPHERE);
+    world[0] = hittable_init(&background_sphere, SPHERE);
 
     object_amount += 5;
 
