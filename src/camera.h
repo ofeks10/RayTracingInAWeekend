@@ -11,7 +11,7 @@ typedef struct camera {
     vec3_t vertical;
 } camera_t;
 
-camera_t camera_init();
-ray_t camera_get_ray(camera_t camera, float u, float v);
+camera_t camera_init(double vertical_fov, double aspect, point3_t look_from, point3_t look_at, vec3_t vup);
+ray_t camera_get_ray(camera_t camera, double s, double t);
 
 #endif // CAMERA_H

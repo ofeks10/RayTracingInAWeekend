@@ -12,5 +12,6 @@
 double random_double(void);
 double random_range(double min, double max);
 double clamp(double x, double min, double max);
+double degrees_to_radians(double degrees);
 
 #endif // CONSTS_H

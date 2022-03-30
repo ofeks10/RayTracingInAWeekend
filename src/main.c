@@ -43,7 +43,7 @@ int main(void) {
     int object_amount = 0;
     hittable_t world[10] = { 0 };
 
-    camera_t cam = camera_init();
+    camera_t cam = camera_init(20.0, ASPECT_RATIO, vec3_init(-2, 2, 1), vec3_init(0, 0, -1), vec3_init(0, 1, 0));
 
     printf("P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
 
