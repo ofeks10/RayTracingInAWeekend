@@ -58,11 +58,11 @@ int main(void) {
     sphere_t sphere_left2 = sphere_init(vec3_init(-1.0, 0.0, -1.0), -0.4, &material_left);
     sphere_t background_sphere = sphere_init(vec3_init(0.0, -100.5, -1.0), 100.0, &material_ground);
 
-    world[4] = hittable_init(&sphere_center, SPHERE);
+    world[0] = hittable_init(&sphere_center, SPHERE);
     world[1] = hittable_init(&sphere_right, SPHERE);
     world[3] = hittable_init(&sphere_left, SPHERE);
     world[2] = hittable_init(&sphere_left2, SPHERE);
-    world[0] = hittable_init(&background_sphere, SPHERE);
+    world[4] = hittable_init(&background_sphere, SPHERE);
 
     object_amount += 5;
 
